@@ -1,0 +1,5 @@
+PWM.c:18:6:relay	16	static
+PWM.c:28:17:generatePWM	16	static
+PWM.c:36:6:generateCurrent	24	static
+PWM.c:41:6:readFeedback	8	static
+PWM.c:55:10:specifyState	16	static

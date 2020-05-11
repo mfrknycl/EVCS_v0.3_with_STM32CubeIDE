@@ -1,0 +1,12 @@
+MCP9808.c:14:6:init	8	static
+MCP9808.c:29:7:readTempC	24	static
+MCP9808.c:44:6:shutdown_wake	32	static
+MCP9808.c:60:6:shutdown	8	static
+MCP9808.c:67:6:wake	8	static
+MCP9808.c:76:9:getResolution	8	static
+MCP9808.c:84:6:setResolution	16	static
+MCP9808.c:94:6:write8	32	static
+MCP9808.c:103:9:read8	32	static
+MCP9808.c:118:6:write16	32	static
+MCP9808.c:127:10:read16	40	static
+MCP9808.c:142:6:isMCP98083Ready	8	static
