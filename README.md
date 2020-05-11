@@ -8,17 +8,17 @@ These instructions will get you a copy of the project up and running on your loc
 
 ### Prerequisites
 
--Installing STM32CubeIDE for Windows
-  +[STM32CubeIDE Windows Installer](https://www.st.com/en/development-tools/stm32cubeide.html)
+- Installing STM32CubeIDE for Windows
+  + [STM32CubeIDE Windows Installer](https://www.st.com/en/development-tools/stm32cubeide.html)
   
--Installing compiler (GCC) for host (Windows)
-  +[MinGW - Minimalist GNU for Windows](https://osdn.net/projects/mingw/downloads/68260/mingw-get-setup.exe/)
-  +When you see the Installation Manager Window, go to Basic Setup > right click on mingw32-gcc++.bin & msys-base-bin > Mark for Installation.
-  +After that, go to Installation > Apply Changes > Apply
-  +After Installing close the Installer
-  +Go to Control Panel > System and Security > System > Advanced system settings > Advanced >
+- Installing compiler (GCC) for host (Windows)
+  + [MinGW - Minimalist GNU for Windows](https://osdn.net/projects/mingw/downloads/68260/mingw-get-setup.exe/)
+  + When you see the Installation Manager Window, go to Basic Setup > right click on mingw32-gcc++.bin & msys-base-bin > Mark for Installation.
+  + After that, go to Installation > Apply Changes > Apply
+  + After Installing close the Installer
+  + Go to Control Panel > System and Security > System > Advanced system settings > Advanced >
   Environment Variables > Under user varibles choose Path and click Edit
-  +After that copy the path of your MinGW Installation ex: 'C:\MinGW\bin' and 'C:\MinGW\msys\1.0\bin'
+  + After that copy the path of your MinGW Installation ex: 'C:\MinGW\bin' and 'C:\MinGW\msys\1.0\bin'
 
 ```
 Give examples
