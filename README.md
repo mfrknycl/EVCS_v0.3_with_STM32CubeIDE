@@ -10,6 +10,7 @@ These instructions will get you a copy of the project up and running on your loc
 
 -Installing STM32CubeIDE for Windows
   +[STM32CubeIDE Windows Installer](https://www.st.com/en/development-tools/stm32cubeide.html)
+  
 -Installing compiler (GCC) for host (Windows)
   +[MinGW - Minimalist GNU for Windows](https://osdn.net/projects/mingw/downloads/68260/mingw-get-setup.exe/)
   +When you see the Installation Manager Window, go to Basic Setup > right click on mingw32-gcc++.bin & msys-base-bin > Mark for Installation.
