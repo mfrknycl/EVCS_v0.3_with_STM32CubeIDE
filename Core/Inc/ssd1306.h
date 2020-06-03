@@ -6,6 +6,7 @@
 #include <stddef.h>
 #include "stm32f0xx_hal.h"
 #include "ssd1306_fonts.h"
+#include <stdbool.h>
 
 extern I2C_HandleTypeDef hi2c1;
 /* Variables ------------------------------------------------------------------*/
@@ -41,7 +42,7 @@ typedef struct {
 } SSD1306_t;
 
 
-/* Function Decleration ------------------------------------------------------------------*/
+/* Function Declaration ------------------------------------------------------------------*/
 // Procedure definitions
 void ssd1306_Init(void);
 void ssd1306_Fill(SSD1306_COLOR color);
@@ -54,12 +55,14 @@ void ssd1306_WriteInteger(int num, FontDef Font, SSD1306_COLOR color);
 void ssd1306_WriteFloat(float num, FontDef Font, SSD1306_COLOR color);
 
 void ssd1306_SetCursor(uint8_t x, uint8_t y);
-void testdrawbitmap(void) ;
+void testdrawbitmap(void);
 
 // Low-level procedures
 void ssd1306_Reset(void);
 void ssd1306_WriteCommand(uint8_t byte);
 void ssd1306_WriteData(uint8_t* buffer, size_t buff_size);
+
+bool isSSD1306Ready();
 
 
 

@@ -27,6 +27,7 @@
 #include "cap1203.h"
 #include "CAP1203_Registers.h"
 #include "MCP9808.h"
+#include "ssd1306.h"
 #include <stdint.h>
 #include <string.h>
 
@@ -60,7 +61,6 @@ ADC_HandleTypeDef hadc;
 
 I2C_HandleTypeDef hi2c1;
 
-TIM_HandleTypeDef htim1;
 TIM_HandleTypeDef htim3;
 
 UART_HandleTypeDef huart1;
@@ -77,12 +77,11 @@ UART_HandleTypeDef huart2;
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
-static void MX_ADC_Init(void);
 static void MX_I2C1_Init(void);
-static void MX_TIM1_Init(void);
+static void MX_TIM3_Init(void);
 static void MX_USART1_UART_Init(void);
 static void MX_USART2_UART_Init(void);
-static void MX_TIM3_Init(void);
+static void MX_ADC_Init(void);
 /* USER CODE BEGIN PFP */
 
 /* USER CODE END PFP */
@@ -117,6 +116,10 @@ float input_voltage = 0.0;
 uint32_t previous;
 uint32_t half;
 
+int x,y,k = 0;
+
+int currentstate = 0;
+
 /* USER CODE END 0 */
 
 /**
@@ -128,7 +131,6 @@ int main(void)
   /* USER CODE BEGIN 1 */
 
   /* USER CODE END 1 */
-
 
   /* MCU Configuration--------------------------------------------------------*/
 
@@ -148,14 +150,13 @@ int main(void)
 
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
-  MX_ADC_Init();
   MX_I2C1_Init();
-  MX_TIM1_Init();
+  MX_TIM3_Init();
   MX_USART1_UART_Init();
   MX_USART2_UART_Init();
-  MX_TIM3_Init();
+  MX_ADC_Init();
   /* USER CODE BEGIN 2 */
-/*
+
 	if(!isCAP1203Ready()){
 		while(1){
 			HAL_GPIO_TogglePin(NEW_LED_GPIO_Port, NEW_LED_Pin);
@@ -176,15 +177,16 @@ int main(void)
 			HAL_Delay(70);
 		}
 	}
-*/
+
+
 
 		/* Inits ------------------------------------------------------------------*/
 
 	HAL_TIM_PWM_Start(&htim3, TIM_CHANNEL_1);
-	//HAL_ADC_Start(&hadc);
-	HAL_ADC_Start_IT(&hadc);
+
+
 	init(); 				//MCP9808 initialization
-  ssd1306_Init(); //OLED1203 initialization
+    ssd1306_Init(); //OLED1203 initialization
 
 
 
@@ -199,6 +201,12 @@ int main(void)
 	ssd1306_SetCursor(2, 7);
 	ssd1306_WriteString("Hello", Font_11x18, White);
 	ssd1306_UpdateScreen();
+	deneme = 0;
+
+	htim3.Instance->CCR1 = 1000;
+	analog_value = 0;
+
+
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -208,26 +216,85 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-/*
-	generateCurrent(current);
 
-	previous = half;
-	half = 0;
-	for(int i=0;i<1000;i++){
-		half += HAL_ADC_GetValue(&hadc);
-	}
-	half /= 1000;
+	  	//generateCurrent(current);
 
-	analog_value = (previous + half)/2;
-	input_voltage = (analog_value * 3.3) / 255.0;
+	  	HAL_GPIO_WritePin(NEW_LED_GPIO_Port, NEW_LED_Pin, 1);
 
 
+		  HAL_ADC_Start(&hadc); //Start ADC reading
 
-	HAL_Delay(250);
+		  if(HAL_ADC_PollForConversion(&hadc, 5) == HAL_OK){
+			  analog_value = HAL_ADC_GetValue(&hadc);
+		  }
+		  HAL_ADC_Stop(&hadc);
 
-*/
-	  HAL_GPIO_WritePin(NEW_LED_GPIO_Port, NEW_LED_Pin,deneme);
-	  HAL_Delay(250);
+		  HAL_Delay(200);
+
+		  if ((analog_value >= 240) && (analog_value <= 255)){
+			  htim3.Instance->CCR1 = 1000;
+			  ssd1306_Fill(Black);
+			  ssd1306_SetCursor(2, 7);
+			  ssd1306_WriteString("State A", Font_11x18, White);
+			  ssd1306_UpdateScreen();
+		  }
+		  HAL_Delay(200);
+
+		  if ((analog_value >= 117) && (analog_value <= 125)){
+			  htim3.Instance->CCR1 = 1000;
+			  ssd1306_Fill(Black);
+			  ssd1306_SetCursor(2, 7);
+			  ssd1306_WriteString("State A", Font_11x18, White);
+			  ssd1306_UpdateScreen();
+		  }
+
+		  if ((analog_value >= 210) && (analog_value <= 220)){
+		  	  htim3.Instance->CCR1 = 500;
+		  	  currentstate = 2;
+		  	  ssd1306_Fill(Black);
+		  	  ssd1306_SetCursor(2, 7);
+		  	  ssd1306_WriteString("State B", Font_11x18, White);
+		  	  ssd1306_UpdateScreen();
+
+	  	  }
+
+		  if ((analog_value >= 100) && (analog_value <= 108)){
+			  	  htim3.Instance->CCR1 = 500;
+			  	  currentstate = 2;
+			  	  ssd1306_Fill(Black);
+			  	  ssd1306_SetCursor(2, 7);
+			  	  ssd1306_WriteString("State B", Font_11x18, White);
+			  	  ssd1306_UpdateScreen();
+		  	}
+
+
+		  if((analog_value >= 80) && (analog_value <= 89)){
+			  htim3.Instance->CCR1 = 500;
+			  currentstate = 3;
+			  ssd1306_Fill(Black);
+			  ssd1306_SetCursor(2, 7);
+			  ssd1306_WriteString("State C", Font_11x18, White);
+			  ssd1306_UpdateScreen();
+		  }
+
+		  if((analog_value >= 68) && (analog_value <= 75)){
+			  htim3.Instance->CCR1 = 500;
+			  currentstate = 3;
+			  ssd1306_Fill(Black);
+			  ssd1306_SetCursor(2, 7);
+			  ssd1306_WriteString("State D", Font_11x18, White);
+			  ssd1306_UpdateScreen();
+		  }
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -251,9 +318,11 @@ void SystemClock_Config(void)
 
   /** Initializes the CPU, AHB and APB busses clocks 
   */
-  RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSI;
+  RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSI|RCC_OSCILLATORTYPE_HSI14;
   RCC_OscInitStruct.HSIState = RCC_HSI_ON;
+  RCC_OscInitStruct.HSI14State = RCC_HSI14_ON;
   RCC_OscInitStruct.HSICalibrationValue = RCC_HSICALIBRATION_DEFAULT;
+  RCC_OscInitStruct.HSI14CalibrationValue = 16;
   RCC_OscInitStruct.PLL.PLLState = RCC_PLL_NONE;
   if (HAL_RCC_OscConfig(&RCC_OscInitStruct) != HAL_OK)
   {
@@ -300,14 +369,14 @@ static void MX_ADC_Init(void)
   /** Configure the global features of the ADC (Clock, Resolution, Data Alignment and number of conversion) 
   */
   hadc.Instance = ADC1;
-  hadc.Init.ClockPrescaler = ADC_CLOCK_SYNC_PCLK_DIV4;
+  hadc.Init.ClockPrescaler = ADC_CLOCK_ASYNC_DIV1;
   hadc.Init.Resolution = ADC_RESOLUTION_8B;
   hadc.Init.DataAlign = ADC_DATAALIGN_RIGHT;
   hadc.Init.ScanConvMode = ADC_SCAN_DIRECTION_FORWARD;
   hadc.Init.EOCSelection = ADC_EOC_SINGLE_CONV;
   hadc.Init.LowPowerAutoWait = DISABLE;
   hadc.Init.LowPowerAutoPowerOff = DISABLE;
-  hadc.Init.ContinuousConvMode = ENABLE;
+  hadc.Init.ContinuousConvMode = DISABLE;
   hadc.Init.DiscontinuousConvMode = DISABLE;
   hadc.Init.ExternalTrigConv = ADC_SOFTWARE_START;
   hadc.Init.ExternalTrigConvEdge = ADC_EXTERNALTRIGCONVEDGE_NONE;
@@ -321,7 +390,7 @@ static void MX_ADC_Init(void)
   */
   sConfig.Channel = ADC_CHANNEL_0;
   sConfig.Rank = ADC_RANK_CHANNEL_NUMBER;
-  sConfig.SamplingTime = ADC_SAMPLETIME_239CYCLES_5;
+  sConfig.SamplingTime = ADC_SAMPLETIME_1CYCLE_5;
   if (HAL_ADC_ConfigChannel(&hadc, &sConfig) != HAL_OK)
   {
     Error_Handler();
@@ -382,52 +451,6 @@ static void MX_I2C1_Init(void)
   /* USER CODE BEGIN I2C1_Init 2 */
 
   /* USER CODE END I2C1_Init 2 */
-
-}
-
-/**
-  * @brief TIM1 Initialization Function
-  * @param None
-  * @retval None
-  */
-static void MX_TIM1_Init(void)
-{
-
-  /* USER CODE BEGIN TIM1_Init 0 */
-
-  /* USER CODE END TIM1_Init 0 */
-
-  TIM_ClockConfigTypeDef sClockSourceConfig = {0};
-  TIM_MasterConfigTypeDef sMasterConfig = {0};
-
-  /* USER CODE BEGIN TIM1_Init 1 */
-
-  /* USER CODE END TIM1_Init 1 */
-  htim1.Instance = TIM1;
-  htim1.Init.Prescaler = 0;
-  htim1.Init.CounterMode = TIM_COUNTERMODE_UP;
-  htim1.Init.Period = 0;
-  htim1.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
-  htim1.Init.RepetitionCounter = 0;
-  htim1.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
-  if (HAL_TIM_Base_Init(&htim1) != HAL_OK)
-  {
-    Error_Handler();
-  }
-  sClockSourceConfig.ClockSource = TIM_CLOCKSOURCE_INTERNAL;
-  if (HAL_TIM_ConfigClockSource(&htim1, &sClockSourceConfig) != HAL_OK)
-  {
-    Error_Handler();
-  }
-  sMasterConfig.MasterOutputTrigger = TIM_TRGO_RESET;
-  sMasterConfig.MasterSlaveMode = TIM_MASTERSLAVEMODE_DISABLE;
-  if (HAL_TIMEx_MasterConfigSynchronization(&htim1, &sMasterConfig) != HAL_OK)
-  {
-    Error_Handler();
-  }
-  /* USER CODE BEGIN TIM1_Init 2 */
-
-  /* USER CODE END TIM1_Init 2 */
 
 }
 
@@ -617,9 +640,32 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(NEW_LED_GPIO_Port, &GPIO_InitStruct);
 
+  /* EXTI interrupt init*/
+  HAL_NVIC_SetPriority(EXTI2_3_IRQn, 0, 0);
+  HAL_NVIC_EnableIRQ(EXTI2_3_IRQn);
+
 }
 
 /* USER CODE BEGIN 4 */
+/**
+  * @brief  EXTI line detection callback.
+  * @param  GPIO_Pin Specifies the port pin connected to corresponding EXTI line.
+  * @retval None
+  */
+void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
+{
+  /* Prevent unused argument(s) compilation warning */
+  UNUSED(GPIO_Pin);
+
+  /* NOTE: This function should not be modified, when the callback is needed,
+            the HAL_GPIO_EXTI_Callback could be implemented in the user file
+   */
+	ssd1306_Fill(Black);
+	ssd1306_SetCursor(2, 7);
+	ssd1306_WriteString("GFCI [X]", Font_11x18, White);
+	ssd1306_UpdateScreen();
+	HAL_GPIO_WritePin(NEW_LED_GPIO_Port, NEW_LED_Pin, 1);
+}
 
 /* USER CODE END 4 */
 
@@ -643,7 +689,7 @@ void Error_Handler(void)
   * @param  line: assert_param error line source number
   * @retval None
   */
-void assert_failed(char *file, uint32_t line)
+void assert_failed(uint8_t *file, uint32_t line)
 { 
   /* USER CODE BEGIN 6 */
   /* User can add his own implementation to report the file name and line number,

@@ -1,6 +1,7 @@
 #include "ssd1306.h"
 #include "gfx.h"
-
+#include <stdbool.h>
+#include <stdio.h>
 
 void ssd1306_Reset(void) {
 	/* for I2C - do nothing */
@@ -258,6 +259,16 @@ void testdrawbitmap(void) {
 
 }
 
+/**
+ *		@brief	Check it if the device is ready
+ *		@return true
+ */
+bool isSSD1306Ready(){
+	if(HAL_I2C_IsDeviceReady(&hi2c1, SSD1306_I2C_ADDR, 2, 10) != HAL_OK){
+		return false;
+	}
+	return true;
+}
 
 
 

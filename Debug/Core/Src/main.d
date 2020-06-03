@@ -31,8 +31,8 @@ Core/Src/main.o: ../Core/Src/main.c ../Core/Inc/main.h \
  ../Drivers/STM32F0xx_HAL_Driver/Inc/stm32f0xx_hal_uart_ex.h \
  ../Core/Inc/PWM.h ../Core/Inc/cap1203.h ../Core/Inc/CAP1203_Registers.h \
  ../Core/Inc/CAP1203_Registers.h ../Core/Inc/MCP9808.h \
- ../Core/Inc/ssd1306_tests.h ../Core/Inc/ssd1306.h \
- ../Core/Inc/ssd1306_fonts.h ../Core/Inc/menu.h ../Core/Inc/MCP9808.h \
+ ../Core/Inc/ssd1306.h ../Core/Inc/ssd1306_fonts.h \
+ ../Core/Inc/ssd1306_tests.h ../Core/Inc/menu.h ../Core/Inc/MCP9808.h \
  ../Core/Inc/fonts.h ../Core/Inc/oled.h ../Core/Inc/gfx.h
 
 ../Core/Inc/main.h:
@@ -107,11 +107,11 @@ Core/Src/main.o: ../Core/Src/main.c ../Core/Inc/main.h \
 
 ../Core/Inc/MCP9808.h:
 
-../Core/Inc/ssd1306_tests.h:
-
 ../Core/Inc/ssd1306.h:
 
 ../Core/Inc/ssd1306_fonts.h:
+
+../Core/Inc/ssd1306_tests.h:
 
 ../Core/Inc/menu.h:
 

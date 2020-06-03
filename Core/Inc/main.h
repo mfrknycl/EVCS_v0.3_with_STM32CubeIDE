@@ -68,6 +68,7 @@ void Error_Handler(void);
 #define Sense_Out_GPIO_Port GPIOC
 #define GFCI_INT_Pin GPIO_PIN_3
 #define GFCI_INT_GPIO_Port GPIOC
+#define GFCI_INT_EXTI_IRQn EXTI2_3_IRQn
 #define FEEDBACK_Pin GPIO_PIN_0
 #define FEEDBACK_GPIO_Port GPIOA
 #define GFCI_TEST_Pin GPIO_PIN_1

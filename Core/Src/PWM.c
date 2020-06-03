@@ -23,12 +23,12 @@ void relay(uint8_t relayState){
 		relay_statu = 0;
 		HAL_GPIO_WritePin(RLY1_GPIO_Port, RLY1_Pin, 0);
 	}
-}
-
+}/*
 CurrentStates_t generatePWM(uint16_t dutycycle){
 	htim3.Instance->CCR1 = dutycycle;
 	//__HAL_TIM_SET_COMPARE(&htim3, TIM_CHANNEL_1, dutycycle);
 }
+*/
 		//duty = current / 0.6;
 		//__HAL_TIM_SET_COMPARE(&htim3, TIM_CHANNEL_1, duty*10);
 //Duty cycle = Amps / 0.6
@@ -37,7 +37,7 @@ void generateCurrent(uint16_t current){
 	htim3.Instance->CCR1 = (current/0.6)*10;
 	//__HAL_TIM_SET_COMPARE(&htim3, TIM_CHANNEL_1, (current/0.6));
 }
-
+/*
 void readFeedback(){
 		if(HAL_ADC_PollForConversion(&hadc, 5) == HAL_OK)
 		{
@@ -51,7 +51,8 @@ void readFeedback(){
 		
 		HAL_Delay(50);
 }
-
+*/
+/*
 States_t specifyState(States_t *pStates){
 	switch (*pStates)
   {
@@ -72,6 +73,9 @@ States_t specifyState(States_t *pStates){
   		break;
   }
 }
+*/
+
+
 //***************
 
 

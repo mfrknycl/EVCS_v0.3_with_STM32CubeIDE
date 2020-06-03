@@ -180,7 +180,7 @@ bool isCAP1203Ready(){
 }
 
 /* IS RIGHT SWIPE
-    Checks if a right swipe occured on the board. This method
+    Checks if a right swipe occurred on the board. This method
     takes up all functionality due to implementation of
     while loop with millis().
 */
