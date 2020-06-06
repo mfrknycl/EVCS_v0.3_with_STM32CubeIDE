@@ -33,7 +33,8 @@ Core/Src/main.o: ../Core/Src/main.c ../Core/Inc/main.h \
  ../Core/Inc/CAP1203_Registers.h ../Core/Inc/MCP9808.h \
  ../Core/Inc/ssd1306.h ../Core/Inc/ssd1306_fonts.h \
  ../Core/Inc/ssd1306_tests.h ../Core/Inc/menu.h ../Core/Inc/MCP9808.h \
- ../Core/Inc/fonts.h ../Core/Inc/oled.h ../Core/Inc/gfx.h
+ ../Core/Inc/fonts.h ../Core/Inc/oled.h ../Core/Inc/gfx.h \
+ ../Core/Inc/States.h ../Core/Inc/ssd1306_tests.h ../Core/Inc/ssd1306.h
 
 ../Core/Inc/main.h:
 
@@ -122,3 +123,9 @@ Core/Src/main.o: ../Core/Src/main.c ../Core/Inc/main.h \
 ../Core/Inc/oled.h:
 
 ../Core/Inc/gfx.h:
+
+../Core/Inc/States.h:
+
+../Core/Inc/ssd1306_tests.h:
+
+../Core/Inc/ssd1306.h:

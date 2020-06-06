@@ -1,6 +1,7 @@
 "Core/Src/CAP1203.o"
 "Core/Src/MCP9808.o"
 "Core/Src/PWM.o"
+"Core/Src/States.o"
 "Core/Src/fonts.o"
 "Core/Src/gfx.o"
 "Core/Src/main.o"

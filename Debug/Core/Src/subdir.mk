@@ -7,6 +7,7 @@ C_SRCS += \
 ../Core/Src/CAP1203.c \
 ../Core/Src/MCP9808.c \
 ../Core/Src/PWM.c \
+../Core/Src/States.c \
 ../Core/Src/fonts.c \
 ../Core/Src/gfx.c \
 ../Core/Src/main.c \
@@ -25,6 +26,7 @@ OBJS += \
 ./Core/Src/CAP1203.o \
 ./Core/Src/MCP9808.o \
 ./Core/Src/PWM.o \
+./Core/Src/States.o \
 ./Core/Src/fonts.o \
 ./Core/Src/gfx.o \
 ./Core/Src/main.o \
@@ -43,6 +45,7 @@ C_DEPS += \
 ./Core/Src/CAP1203.d \
 ./Core/Src/MCP9808.d \
 ./Core/Src/PWM.d \
+./Core/Src/States.d \
 ./Core/Src/fonts.d \
 ./Core/Src/gfx.d \
 ./Core/Src/main.d \
@@ -65,6 +68,8 @@ Core/Src/MCP9808.o: ../Core/Src/MCP9808.c
 	arm-none-eabi-gcc "$<" -mcpu=cortex-m0 -std=gnu11 -g3 -DUSE_HAL_DRIVER -DSTM32F030x8 -DDEBUG -c -I../Drivers/STM32F0xx_HAL_Driver/Inc -I../Drivers/CMSIS/Include -I../Core/Inc -I../Drivers/STM32F0xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F0xx/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -MMD -MP -MF"Core/Src/MCP9808.d" -MT"$@" --specs=nano.specs -mfloat-abi=soft -mthumb -o "$@"
 Core/Src/PWM.o: ../Core/Src/PWM.c
 	arm-none-eabi-gcc "$<" -mcpu=cortex-m0 -std=gnu11 -g3 -DUSE_HAL_DRIVER -DSTM32F030x8 -DDEBUG -c -I../Drivers/STM32F0xx_HAL_Driver/Inc -I../Drivers/CMSIS/Include -I../Core/Inc -I../Drivers/STM32F0xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F0xx/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -MMD -MP -MF"Core/Src/PWM.d" -MT"$@" --specs=nano.specs -mfloat-abi=soft -mthumb -o "$@"
+Core/Src/States.o: ../Core/Src/States.c
+	arm-none-eabi-gcc "$<" -mcpu=cortex-m0 -std=gnu11 -g3 -DUSE_HAL_DRIVER -DSTM32F030x8 -DDEBUG -c -I../Drivers/STM32F0xx_HAL_Driver/Inc -I../Drivers/CMSIS/Include -I../Core/Inc -I../Drivers/STM32F0xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F0xx/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -MMD -MP -MF"Core/Src/States.d" -MT"$@" --specs=nano.specs -mfloat-abi=soft -mthumb -o "$@"
 Core/Src/fonts.o: ../Core/Src/fonts.c
 	arm-none-eabi-gcc "$<" -mcpu=cortex-m0 -std=gnu11 -g3 -DUSE_HAL_DRIVER -DSTM32F030x8 -DDEBUG -c -I../Drivers/STM32F0xx_HAL_Driver/Inc -I../Drivers/CMSIS/Include -I../Core/Inc -I../Drivers/STM32F0xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F0xx/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -MMD -MP -MF"Core/Src/fonts.d" -MT"$@" --specs=nano.specs -mfloat-abi=soft -mthumb -o "$@"
 Core/Src/gfx.o: ../Core/Src/gfx.c

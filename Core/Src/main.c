@@ -39,6 +39,8 @@
 #include "fonts.h"
 #include "oled.h"
 #include "gfx.h"
+
+#include "States.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -113,12 +115,15 @@ int store = 0;
 uint32_t analog_value = 0;
 float input_voltage = 0.0;
 
-uint32_t previous;
-uint32_t half;
+uint32_t previous = 0;
+uint32_t half = 0;
+uint32_t result = 0;
 
 int x,y,k = 0;
 
 int currentstate = 0;
+
+int dutycycle = 0;
 
 /* USER CODE END 0 */
 
@@ -179,7 +184,6 @@ int main(void)
 	}
 
 
-
 		/* Inits ------------------------------------------------------------------*/
 
 	HAL_TIM_PWM_Start(&htim3, TIM_CHANNEL_1);
@@ -192,19 +196,21 @@ int main(void)
 
 	setResolution(3); // sets the resolution mode of reading, the modes are defined in the table bellow:
   // Mode Resolution SampleTime
-  //  0    0.5°C       30 ms
+  //  0    0.5°C       30 my
   //  1    0.25°C      65 ms
   //  2    0.125°C     130 ms
   //  3    0.0625°C    250 ms
 	current = 30;
+
+
+	//Initializing the EVSE
 	ssd1306_Fill(Black);
 	ssd1306_SetCursor(2, 7);
-	ssd1306_WriteString("Hello", Font_11x18, White);
+	ssd1306_WriteString("MFRKNYCL", Font_11x18, White);
 	ssd1306_UpdateScreen();
-	deneme = 0;
-
 	htim3.Instance->CCR1 = 1000;
-	analog_value = 0;
+
+
 
 
   /* USER CODE END 2 */
@@ -217,74 +223,72 @@ int main(void)
 
     /* USER CODE BEGIN 3 */
 
-	  	//generateCurrent(current);
-
-	  	HAL_GPIO_WritePin(NEW_LED_GPIO_Port, NEW_LED_Pin, 1);
 
 
-		  HAL_ADC_Start(&hadc); //Start ADC reading
+	  HAL_GPIO_WritePin(NEW_LED_GPIO_Port, NEW_LED_Pin, 0);
 
-		  if(HAL_ADC_PollForConversion(&hadc, 5) == HAL_OK){
-			  analog_value = HAL_ADC_GetValue(&hadc);
-		  }
-		  HAL_ADC_Stop(&hadc);
+	  //Start ADC reading
+	  HAL_ADC_Start(&hadc);
 
-		  HAL_Delay(200);
+	  if(HAL_ADC_PollForConversion(&hadc, 5) == HAL_OK){
 
-		  if ((analog_value >= 240) && (analog_value <= 255)){
-			  htim3.Instance->CCR1 = 1000;
+		  analog_value = HAL_ADC_GetValue(&hadc);
+		  //input_voltage = (analog_value * 3.3)/225;
+
+	  }
+	  HAL_ADC_Stop(&hadc);
+
+	  HAL_Delay(200);
+
+	  getState();
+
+	  switch (getState()) {
+		case State_A:
 			  ssd1306_Fill(Black);
 			  ssd1306_SetCursor(2, 7);
-			  ssd1306_WriteString("State A", Font_11x18, White);
+			  ssd1306_WriteString("MFRKNYCL", Font_11x18, White);
 			  ssd1306_UpdateScreen();
-		  }
-		  HAL_Delay(200);
-
-		  if ((analog_value >= 117) && (analog_value <= 125)){
-			  htim3.Instance->CCR1 = 1000;
+			break;
+		case State_B:
 			  ssd1306_Fill(Black);
 			  ssd1306_SetCursor(2, 7);
-			  ssd1306_WriteString("State A", Font_11x18, White);
+			  ssd1306_WriteString("Connected", Font_11x18, White);
 			  ssd1306_UpdateScreen();
-		  }
-
-		  if ((analog_value >= 210) && (analog_value <= 220)){
-		  	  htim3.Instance->CCR1 = 500;
-		  	  currentstate = 2;
-		  	  ssd1306_Fill(Black);
-		  	  ssd1306_SetCursor(2, 7);
-		  	  ssd1306_WriteString("State B", Font_11x18, White);
-		  	  ssd1306_UpdateScreen();
-
-	  	  }
-
-		  if ((analog_value >= 100) && (analog_value <= 108)){
-			  	  htim3.Instance->CCR1 = 500;
-			  	  currentstate = 2;
-			  	  ssd1306_Fill(Black);
-			  	  ssd1306_SetCursor(2, 7);
-			  	  ssd1306_WriteString("State B", Font_11x18, White);
-			  	  ssd1306_UpdateScreen();
-		  	}
-
-
-		  if((analog_value >= 80) && (analog_value <= 89)){
-			  htim3.Instance->CCR1 = 500;
-			  currentstate = 3;
+			break;
+		case State_C:
 			  ssd1306_Fill(Black);
 			  ssd1306_SetCursor(2, 7);
-			  ssd1306_WriteString("State C", Font_11x18, White);
+			  ssd1306_WriteString("Charging", Font_11x18, White);
 			  ssd1306_UpdateScreen();
-		  }
-
-		  if((analog_value >= 68) && (analog_value <= 75)){
-			  htim3.Instance->CCR1 = 500;
-			  currentstate = 3;
+			break;
+		case State_D:
 			  ssd1306_Fill(Black);
 			  ssd1306_SetCursor(2, 7);
-			  ssd1306_WriteString("State D", Font_11x18, White);
+			  ssd1306_WriteString("Ventilation", Font_11x18, White);
 			  ssd1306_UpdateScreen();
-		  }
+			break;
+		case State_E:
+
+			break;
+		case State_F:
+			  ssd1306_Fill(Black);
+			  ssd1306_SetCursor(2, 7);
+			  ssd1306_WriteString("Unknown/Err", Font_11x18, White);
+			  ssd1306_UpdateScreen();
+			break;
+		default:
+			break;
+	  }
+
+	 // HAL_Delay(5000);
+
+
+
+
+
+
+
+
 
 
 
@@ -476,7 +480,7 @@ static void MX_TIM3_Init(void)
   htim3.Instance = TIM3;
   htim3.Init.Prescaler = 8;
   htim3.Init.CounterMode = TIM_COUNTERMODE_UP;
-  htim3.Init.Period = 1000;
+  htim3.Init.Period = 1000;//887;
   htim3.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
   htim3.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
   if (HAL_TIM_Base_Init(&htim3) != HAL_OK)
@@ -660,6 +664,7 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
   /* NOTE: This function should not be modified, when the callback is needed,
             the HAL_GPIO_EXTI_Callback could be implemented in the user file
    */
+
 	ssd1306_Fill(Black);
 	ssd1306_SetCursor(2, 7);
 	ssd1306_WriteString("GFCI [X]", Font_11x18, White);
