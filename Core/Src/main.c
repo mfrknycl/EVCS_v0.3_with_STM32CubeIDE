@@ -242,45 +242,15 @@ int main(void)
 
 	  getState();
 
-	  switch (getState()) {
-		case State_A:
-			  ssd1306_Fill(Black);
-			  ssd1306_SetCursor(2, 7);
-			  ssd1306_WriteString("MFRKNYCL", Font_11x18, White);
-			  ssd1306_UpdateScreen();
-			break;
-		case State_B:
-			  ssd1306_Fill(Black);
-			  ssd1306_SetCursor(2, 7);
-			  ssd1306_WriteString("Connected", Font_11x18, White);
-			  ssd1306_UpdateScreen();
-			break;
-		case State_C:
-			  ssd1306_Fill(Black);
-			  ssd1306_SetCursor(2, 7);
-			  ssd1306_WriteString("Charging", Font_11x18, White);
-			  ssd1306_UpdateScreen();
-			break;
-		case State_D:
-			  ssd1306_Fill(Black);
-			  ssd1306_SetCursor(2, 7);
-			  ssd1306_WriteString("Ventilation", Font_11x18, White);
-			  ssd1306_UpdateScreen();
-			break;
-		case State_E:
-
-			break;
-		case State_F:
-			  ssd1306_Fill(Black);
-			  ssd1306_SetCursor(2, 7);
-			  ssd1306_WriteString("Unknown/Err", Font_11x18, White);
-			  ssd1306_UpdateScreen();
-			break;
-		default:
-			break;
-	  }
+	  screen();
 
 	 // HAL_Delay(5000);
+
+deneme = buttons();
+
+
+
+
 
 
 

@@ -51,4 +51,7 @@ EVSE_StatusTypeDef getState(){
 		  htim3.Instance->CCR1 = 500;
 		  return State_F;
 	  }
+	  else{
+		  return 0;
+	  }
 }

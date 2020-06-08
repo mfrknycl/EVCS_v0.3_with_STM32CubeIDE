@@ -2,7 +2,7 @@
 #include "cap1203.h"
 #include "ssd1306_tests.h"
 #include "ssd1306.h"
-
+#include "States.h"
 
 int state = 0;
 int count = 0;
@@ -10,6 +10,8 @@ extern int buttonStates;
 extern int time;
 extern int gfci_statu;
 extern int relay_statu;
+
+extern TIM_HandleTypeDef htim3;
 
 /**
  *   @brief  Reads the states of the buttons. There are two buttons in total.
@@ -45,21 +47,63 @@ void screen(void){
 	if(state == 0){
 		HAL_Delay(200);
 		switch (buttons()){
-      case 1:
-        main_page();
+      case 0:
+    	  switch (getState()) {
+    		case State_A:
+    			  ssd1306_Fill(Black);
+    			  ssd1306_SetCursor(2, 7);
+    			  ssd1306_WriteString("MFRKNYCL", Font_11x18, White);
+    			  ssd1306_UpdateScreen();
+    			break;
+    		case State_B:
+    			  ssd1306_Fill(Black);
+    			  ssd1306_SetCursor(2, 7);
+    			  ssd1306_WriteString("Connected", Font_11x18, White);
+    			  ssd1306_UpdateScreen();
+    			break;
+    		case State_C:
+    			  ssd1306_Fill(Black);
+    			  ssd1306_SetCursor(2, 7);
+    			  ssd1306_WriteString("Charging", Font_11x18, White);
+    			  ssd1306_UpdateScreen();
+    			break;
+    		case State_D:
+    			  ssd1306_Fill(Black);
+    			  ssd1306_SetCursor(2, 7);
+    			  ssd1306_WriteString("Ventilation", Font_11x18, White);
+    			  ssd1306_UpdateScreen();
+    			break;
+    		case State_E:
+
+    			break;
+    		case State_F:
+    			  ssd1306_Fill(Black);
+    			  ssd1306_SetCursor(2, 7);
+    			  ssd1306_WriteString("Unknown/Err", Font_11x18, White);
+    			  ssd1306_UpdateScreen();
+    			break;
+    		default:
+    			break;
+    	  }
+
         break;
 			    
 		}
 	}
+
 	
 	if(state == 1){
 		HAL_Delay(200);
 		switch (buttons()){
       case 1:
-        NotConnected();
+		  ssd1306_Fill(Black);
+		  ssd1306_SetCursor(2, 7);
+		  ssd1306_WriteInteger(htim3.Instance->CCR1, Font_11x18, White);
+		  ssd1306_UpdateScreen();
+
         break;
       case 3:
-        main_page();
+        state = 0;
         break;
 		}
 	}
